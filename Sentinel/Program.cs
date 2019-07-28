@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sentinel {
 
-    enum Window: int {
+    enum Window : int {
         HIDE = 0,
         SHOWNORMAL = 1,
         SHOW = 5,
@@ -16,9 +16,8 @@ namespace Sentinel {
         SHOWDEFAULT = 10,
         FORCEMINIMISE = 11,
         FORECEMINIMIZE = 11,
-
     }
-    enum WindowPosition: int {
+    enum WindowPosition : int {
         NOTOPMOST = -2,
         TOPMOST = -1,
         TOP = 0,
@@ -29,7 +28,7 @@ namespace Sentinel {
 
         static string GetWindowText(int hWnd) {
             int size = GetWindowTextLength(hWnd);
-            if(size > 0) {
+            if (size > 0) {
                 var builder = new StringBuilder(size + 1);
                 GetWindowText(hWnd, builder, builder.Capacity);
                 return builder.ToString();
@@ -66,24 +65,5 @@ namespace Sentinel {
 
         [DllImport("Kernel32.dll")]
         public static extern uint GetLastError();
-    }
-
-    class Program {
-        static void Main(string[] args) {
-            var hWnd = Win32.FindWindow(null, "#general - Discord");
-            var x = Win32.ShowWindow(hWnd, (int)Window.SHOWNORMAL);
-            var y = Win32.SetForegroundWindow(hWnd);
-
-            Win32.EnumWindows(new Win32.CallbackPointer(WindowEnumDelegate), 0);
-
-            Console.WriteLine(x);
-            Console.WriteLine(y);
-            Console.ReadKey();
-
-        }
-        static bool WindowEnumDelegate(int hWnd, int lParam) {
-            Win32.SetWindowPos(hWnd, (int)WindowPosition.TOP, -1, -1, 30, 30, 0x0002);
-            return true;
-        }
     }
 }
